@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "enabled": true,
+  "initialDelaySeconds": 5,
+  "showDurationSeconds": 20,
+  "repeatEverySeconds": 10,
+  "countdown": {
+    "enabled": true,
+    "seconds": 20,
+    "autoCloseAtZero": true
+  },
+  "behavior": {
+    "selectionMode": "sequence",
+    "refreshConfigBeforeShow": true
+  },
+  "overlay": {
+    "enabled": true,
+    "scrimColor": "#D1000000",
+    "dismissOnOutsideTap": false,
+    "gravity": "center",
+    "paddingDp": 0
+  },
+  "ads": [
+    {
+      "id": "ad_video_274",
+      "enabled": true,
+      "elements": [
+        {
+          "type": "video",
+          "enabled": true,
+          "src": "https://boktoss2345.github.io/Local-Music-Player-Audio-Library-754/assets/video274.mp4",
+          "autoplay": true,
+          "loop": true,
+          "muted": true,
+          "controls": false,
+          "widthPercent": 94,
+          "maxWidthDp": 760,
+          "contentScale": "fit",
+          "cornerRadiusDp": 24,
+          "clickable": true,
+          "url": "amzn://apps/android?initiatePurchaseFlow=true&asin=B0FSTNPJT6"
+        },
+        {
+          "type": "button",
+          "enabled": true,
+          "text": "❌Download Without ADS❌\nRoblox",
+          "widthPercent": 94,
+          "maxWidthDp": 760,
+          "marginDp": 6,
+          "backgroundColor": "#FFD400",
+          "textColor": "#000000",
+          "textSizeSp": 18,
+          "cornerRadiusDp": 16,
+          "gravity": "center",
+          "clickable": true,
+          "url": "amzn://apps/android?initiatePurchaseFlow=true&asin=B0FSTNPJT6"
+        },
+        {
+          "type": "countdown",
+          "enabled": true,
+          "seconds": 20,
+          "style": "circle",
+          "position": "topRight",
+          "autoCloseAtZero": true
+        }
+      ]
+    }
+  ]
+}
