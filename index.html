@@ -3,27 +3,110 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="refresh" content="1;url=https://amongus-online.net/game/amongus">
-  <meta name="theme-color" content="#10101b">
-  <title>Opening Among Us Online</title>
+  <meta name="theme-color" content="#101012">
+  <title>Video Preview</title>
   <style>
-    * { box-sizing: border-box; }
-    body { margin: 0; min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; padding: 24px; background: #10101b; color: #fff; font-family: Arial, sans-serif; text-align: center; }
-    main { max-width: 420px; }
-    h1 { font-size: 28px; }
-    p { color: #c9c9db; line-height: 1.6; }
-    a { display: inline-block; margin-top: 12px; padding: 15px 26px; border-radius: 12px; background: #7048eb; color: #fff; text-decoration: none; font-weight: bold; }
-    a:focus-visible { outline: 3px solid #ffd54f; outline-offset: 4px; }
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      min-height: 100dvh;
+      margin: 0;
+      padding: 24px 16px;
+      background: #101012;
+      color: #f5f5f5;
+      font-family: system-ui, Arial, sans-serif;
+    }
+
+    main {
+      display: grid;
+      gap: 18px;
+      width: 100%;
+      max-width: 840px;
+      justify-items: center;
+    }
+
+    video {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      max-height: 72vh;
+      border: 1px solid #343438;
+      border-radius: 14px;
+      background: #000;
+      object-fit: contain;
+    }
+
+    .update-button {
+      width: 100%;
+      max-width: 360px;
+      min-height: 52px;
+      padding: 12px 20px;
+      border: 0;
+      border-radius: 10px;
+      background: #ffd926;
+      color: #151307;
+      font: inherit;
+      font-size: 1.125rem;
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    .update-button:enabled:hover {
+      background: #ffe467;
+    }
+
+    .update-button:disabled {
+      cursor: default;
+      opacity: 1;
+    }
+
+    :focus-visible {
+      outline: 3px solid #fff;
+      outline-offset: 4px;
+    }
+
+    #video-status {
+      margin: 0;
+      color: #ddd;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
   <main>
-    <h1>Among Us Online</h1>
-    <p>Opening Among Us Online in this tab…<br>If it does not open automatically, press the button below.</p>
-    <a href="https://amongus-online.net/game/amongus">Open Among Us Online</a>
+    <video aria-label="Video preview" controls autoplay muted loop playsinline preload="metadata">
+      <source src="./assets/sdfsDFGEG4RBFV.mp4" type="video/mp4">
+      <source id="remote-video" src="https://raw.githubusercontent.com/boktoss2345/Video-Player-Clips-Albums-Favorites-2584/main/assets/sdfsDFGEG4RBFV.mp4" type="video/mp4">
+      Your browser does not support video playback.
+    </video>
+    <p id="video-status" role="status" hidden>Could not load the video.</p>
+
+    <!-- Put the official update URL between the quotes in data-update-url. -->
+    <button class="update-button" id="update-button" type="button" data-update-url="" disabled>
+      Update To Play
+    </button>
   </main>
+
   <script>
-    window.location.replace('https://amongus-online.net/game/amongus');
+    const remoteVideo = document.getElementById('remote-video');
+    const videoStatus = document.getElementById('video-status');
+
+    remoteVideo.addEventListener('error', () => {
+      videoStatus.hidden = false;
+    });
+
+    const updateButton = document.getElementById('update-button');
+    const updateUrl = updateButton.dataset.updateUrl.trim();
+
+    if (updateUrl) {
+      updateButton.disabled = false;
+      updateButton.addEventListener('click', () => window.location.assign(updateUrl));
+    }
   </script>
 </body>
 </html>
