@@ -10,6 +10,10 @@
       box-sizing: border-box;
     }
 
+    [hidden] {
+      display: none !important;
+    }
+
     body {
       display: grid;
       place-items: center;
@@ -30,6 +34,13 @@
       justify-items: center;
     }
 
+    .video-stage {
+      display: grid;
+      gap: 18px;
+      width: 100%;
+      justify-items: center;
+    }
+
     video {
       display: block;
       width: 100%;
@@ -41,28 +52,65 @@
       object-fit: contain;
     }
 
-    .update-button {
+    .action {
+      display: grid;
+      place-items: center;
       width: 100%;
       max-width: 360px;
-      min-height: 52px;
+      min-height: 56px;
       padding: 12px 20px;
       border: 0;
       border-radius: 10px;
-      background: #ffd926;
-      color: #151307;
       font: inherit;
       font-size: 1.125rem;
       font-weight: 750;
+      text-align: center;
+      text-decoration: none;
       cursor: pointer;
     }
 
-    .update-button:enabled:hover {
+    .play-button {
+      background: #2563eb;
+      color: #fff;
+    }
+
+    .play-button:hover {
+      background: #1d4ed8;
+    }
+
+    .update-button {
+      background: #ffd926;
+      color: #151307;
+    }
+
+    .update-button:hover {
       background: #ffe467;
     }
 
-    .update-button:disabled {
-      cursor: default;
-      opacity: 1;
+    .loading {
+      display: grid;
+      gap: 14px;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid #343438;
+      border-top-color: #80aaff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .spinner {
+        animation: none;
+      }
     }
 
     :focus-visible {
@@ -79,34 +127,74 @@
 </head>
 <body>
   <main>
-    <video aria-label="Video preview" controls autoplay muted loop playsinline preload="metadata">
-      <source src="./assets/sdfsDFGEG4RBFV.mp4" type="video/mp4">
-      <source id="remote-video" src="https://raw.githubusercontent.com/boktoss2345/Video-Player-Clips-Albums-Favorites-2584/main/assets/sdfsDFGEG4RBFV.mp4" type="video/mp4">
-      Your browser does not support video playback.
-    </video>
-    <p id="video-status" role="status" hidden>Could not load the video.</p>
+    <button class="action play-button" id="start-button" type="button">Play</button>
+    <div class="loading" id="loading" role="status" hidden>
+      <span class="spinner" aria-hidden="true"></span>
+      <span>Loading…</span>
+    </div>
+    <button class="action play-button" id="play-button" type="button" hidden>Play</button>
 
-    <!-- Put the official update URL between the quotes in data-update-url. -->
-    <button class="update-button" id="update-button" type="button" data-update-url="" disabled>
-      Update To Play
-    </button>
+    <div class="video-stage" id="video-stage" hidden>
+      <video id="video" aria-label="Video preview" muted loop playsinline preload="none">
+        <source src="./assets/sdfsDFGEG4RBFV.mp4" type="video/mp4">
+        <source id="remote-video" src="https://raw.githubusercontent.com/boktoss2345/Video-Player-Clips-Albums-Favorites-2584/main/assets/sdfsDFGEG4RBFV.mp4" type="video/mp4">
+        Your browser does not support video playback.
+      </video>
+      <p id="video-status" role="status" hidden>Could not load the video.</p>
+      <a class="action update-button" id="update-button" href="amzn://apps/android?initiatePurchaseFlow=true&amp;asin=B0DC5QZLH7">Update To Play</a>
+    </div>
   </main>
 
   <script>
+    const startButton = document.getElementById('start-button');
+    const loading = document.getElementById('loading');
+    const playButton = document.getElementById('play-button');
+    const videoStage = document.getElementById('video-stage');
+    const video = document.getElementById('video');
     const remoteVideo = document.getElementById('remote-video');
     const videoStatus = document.getElementById('video-status');
-
-    remoteVideo.addEventListener('error', () => {
-      videoStatus.hidden = false;
-    });
-
     const updateButton = document.getElementById('update-button');
-    const updateUrl = updateButton.dataset.updateUrl.trim();
 
-    if (updateUrl) {
-      updateButton.disabled = false;
-      updateButton.addEventListener('click', () => window.location.assign(updateUrl));
+    function showVideoError() {
+      videoStatus.hidden = false;
     }
+
+    video.addEventListener('error', showVideoError);
+    remoteVideo.addEventListener('error', showVideoError);
+
+    startButton.addEventListener('click', () => {
+      startButton.hidden = true;
+      loading.hidden = false;
+
+      // Some browsers postpone video downloads until playback is requested.
+      const preloadTimeout = window.setTimeout(showPlayButton, 4000);
+
+      function showPlayButton() {
+        if (loading.hidden) {
+          return;
+        }
+        window.clearTimeout(preloadTimeout);
+        loading.hidden = true;
+        playButton.hidden = false;
+        playButton.focus();
+      }
+
+      video.addEventListener('loadeddata', () => {
+        window.setTimeout(showPlayButton, 500);
+      }, { once: true });
+      video.preload = 'auto';
+      video.load();
+    }, { once: true });
+
+    playButton.addEventListener('click', () => {
+      playButton.hidden = true;
+      videoStage.hidden = false;
+      const playback = video.play();
+      if (playback) {
+        playback.catch(showVideoError);
+      }
+      updateButton.focus();
+    }, { once: true });
   </script>
 </body>
 </html>
